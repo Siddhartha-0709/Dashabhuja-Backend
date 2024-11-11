@@ -9,9 +9,9 @@ const createPost = async (req, res) => {
     console.log("Uploading to Cloudinary");
     const imagePath = req.file.path;
     const imageURLCloudinary = await uploadOnCloudinary(imagePath);
-    console.log('Image uploaded to Cloudinary:', imageURLCloudinary.url);
+    console.log('Image uploaded to Cloudinary:', imageURLCloudinary.secure_url);
     const communityPost = req.body;
-    communityPost.imageUrl = imageURLCloudinary.url;
+    communityPost.imageUrl = imageURLCloudinary.secure_url;
     const newComunityPost = new communityPostModel(communityPost);
     try {
         await newComunityPost.save();

@@ -10,9 +10,9 @@ const createProduct = async (req, res) => {
     console.log("Uploading to Cloudinary");
     const imagePath = req.file.path;
     const imageURLCloudinary = await uploadOnCloudinary(imagePath);
-    console.log('Image uploaded to Cloudinary:', imageURLCloudinary.url);
+    console.log('Image uploaded to Cloudinary:', imageURLCloudinary.secure_url);
     const product = req.body;
-    product.imageUrl = imageURLCloudinary.url;
+    product.imageUrl = imageURLCloudinary.secure_url;
     try {
         const result = await productModel.create(product);
         res.status(200).json(result);

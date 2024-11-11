@@ -9,9 +9,9 @@ const createIncident = async (req, res) => {
     console.log("Uploading to Cloudinary");
     const imagePath = req.file.path;
     const imageURLCloudinary = await uploadOnCloudinary(imagePath);
-    console.log('Image uploaded to Cloudinary:', imageURLCloudinary.url);
+    console.log('Image uploaded to Cloudinary:', imageURLCloudinary.secure_url);
     const incident = req.body;
-    incident.imageUrl = imageURLCloudinary.url;
+    incident.imageUrl = imageURLCloudinary.secure_url;
     const newIncident = new incidentModel(incident);
     try {
         await newIncident.save();
