@@ -96,6 +96,7 @@ const fetchAlertsNearBy10KM = async (req, res) => {
 const initializeJourney = async (req, res) => {
     const {email, startPoint, endPoint} = req.body;
     try {
+        await footprintModel.deleteMany({email:email});        
         const result = await footprintModel.create({email:email, startPoint:startPoint, endPoint:endPoint});
         res.status(200).json(result);
     } catch (error) {

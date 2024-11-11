@@ -45,6 +45,6 @@ const footprintSchema = new mongoose.Schema({
 });
 
 // Adding a TTL index on 'createdAt' with a 24-hour expiration
-footprintSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });  // 86400 seconds = 24 hours
+// footprintSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });  // 86400 seconds = 24 hours
 
 export default mongoose.model('Footprint', footprintSchema);

@@ -23,6 +23,7 @@ const incidentSchema = new mongoose.Schema({
     },
     imageUrl:{
         type: String,
+        default:'https://t3.ftcdn.net/jpg/05/34/05/98/240_F_534059830_nYDtxU2lAp4dAIW7UOKJpZXhOuI3YlMd.jpg'
     },
     status:{
         type: String,

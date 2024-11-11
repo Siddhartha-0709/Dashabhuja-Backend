@@ -1,6 +1,7 @@
 import { uploadOnCloudinary } from "../middlewares/cloudinary.middleware.js";
 import orderModel from "../models/order.model.js";
 import productModel from "../models/product.model.js";
+import nodemailer from "nodemailer";
 
 const createProduct = async (req, res) => {
     if(!req.file) {
@@ -41,6 +42,8 @@ const getProducts = async (req, res) => {
 }
 const createOrder = async (req, res) => {
     const order = req.body;
+    //send mail to seller and buyer
+    sendOrderConfirmationMail(order);
     try {
         const result = await orderModel.create(order);
         res.status(200).json(result);
@@ -49,6 +52,79 @@ const createOrder = async (req, res) => {
     }
 }
 
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
+    }
+});
+
+const sendOrderConfirmationMail = async (newOrder) => {
+    try {
+        const product = await productModel.findById(newOrder.product);
+        await transporter.sendMail({
+            to: `${newOrder.sellerEmail},${newOrder.buyerEmail}`,
+            subject: "Order Confirmation",
+            html: `
+            <style>
+                table {
+                    font-family: arial, sans-serif;
+                    border-collapse: collapse;
+                    width: 100%;
+                }
+
+                td, th {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;
+                }
+
+                tr:nth-child(even) {
+                    background-color: #dddddd;
+                }
+            </style>
+            <table>
+                <tr>
+                    <th>Order Confirmed</th>
+                </tr>
+                <tr>
+                    <td colspan="2"><img src="${product.imageUrl}" width="100" height="100" /></td>
+                </tr>
+                <tr>
+                    <th>Product Name</th>
+                    <td>${product.name}</td>
+                </tr>
+                <tr>
+                    <th>Product Price</th>
+                    <td>₹${product.price}</td>
+                </tr>
+                <tr>
+                    <th>Product Description</th>
+                    <td>${product.description}</td>
+                </tr>
+                <tr>
+                    <th>Buyer Contact Email</th>
+                    <td>${newOrder.buyerEmail}</td>
+                </tr>
+                <tr>
+                    <th>Seller Contect Email</th>
+                    <td>${newOrder.sellerEmail}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>${newOrder.address}</td>
+                </tr>
+            </table>
+            `
+        });
+        console.log("Order confirmation mail sent");
+    } catch (error) {
+        console.log(error);
+    }
+}
 const deleteOrders = async (req, res) => {
     const id = req.query.id;
     try {
