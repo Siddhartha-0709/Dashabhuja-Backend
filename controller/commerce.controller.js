@@ -86,12 +86,11 @@ const sendOrderConfirmationMail = async (newOrder) => {
                     background-color: #dddddd;
                 }
             </style>
+            <h2>Order Confirmation</h2> 
+            <h4>Order Details are as follows</h4>
             <table>
-                
-                <h2>Order Confirmation</h2> 
-                <h4>Order Details are as follows</h4>
                 <tr>
-                    <td colspan="2"><img src="${product.imageUrl}" width="100%" height="auto" /></td>
+                    <td colspan="2"><img src="${product.imageUrl}" width="50%" height="auto" /></td>
                 </tr>
                 <tr>
                     <th>Product Name</th>
